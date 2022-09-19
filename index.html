@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <style>
+        /* @import url('https://fonts.googleapis.com/css2?family=Oleo+Script+Swash+Caps&display=swap'); */
+        /* @import url('https://fonts.googleapis.com/css2?family=Alumni+Sans+Inline+One&family=Montserrat:wght@300&family=Oleo+Script+Swash+Caps&display=swap'); */
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        nav {
+            background-color: purple;
+            height: 65px;
+            color: bisque;
+            font-size: 30px;
+            font-family: 'Oleo Script Swash Caps', cursive;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+
+
+        }
+
+        nav ul {
+            list-style-type: none;
+
+        }
+
+        .game-container {
+            /* background-color: bisque; */
+            display: flex;
+            justify-content: center;
+
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(3, 10vw);
+            grid-template-rows: repeat(3, 10vw);
+            height: auto;
+
+            font-family: 'Oleo Script Swash Caps', cursive;
+            position: relative;
+
+        }
+
+        .box {
+            border: 2px solid black;
+            font-size: 8vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+        }
+
+        .box:hover {
+            background-color: rgb(142, 160, 160);
+
+
+        }
+
+        .imgbox img {
+            width: 0;
+            transition: width 1s ease-in-out;
+            margin-top: 50px;
+
+        }
+
+        .gameinfo {
+            padding: 0 34px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }
+
+        .br-0 {
+            border-right: 0;
+
+        }
+
+        .bl-0 {
+            border-left: 0;
+
+        }
+
+        .bt-0 {
+            border-top: 0;
+
+        }
+
+        .bb-0 {
+            border-bottom: 0;
+
+        }
+
+        #reset {
+
+            margin: 0 20px;
+            padding: 6px 14px;
+            background-color: darkcyan;
+            border: 2px solid black;
+            border-radius: 6px;
+            cursor: pointer;
+
+        }
+
+        #reset:hover {
+            color: azure;
+            border-color: brown;
+
+        }
+
+
+        @media screen and (max-width: 900px) {
+            .game-container {
+                flex-wrap: wrap;
+            }
+
+            .gameinfo {
+                margin-top: 50px
+            }
+
+            .gameinfo h1,
+            span,
+            button {
+                font-size: 2rem
+            }
+
+            .container {
+                display: grid;
+                grid-template-columns: repeat(3, 20vw);
+                grid-template-rows: repeat(3, 20vw);
+                font-family: 'Oleo Script Swash Caps', cursive;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li> TIC TAK TOE.COM</li>
+        </ul>
+    </nav>
+    <br>
+    <div class="game-container">
+        <div class="container">
+
+            <div class="box bt-0 bl-0"><span class="boxtext"></span></div>
+            <div class="box bt-0"><span class="boxtext"></span></div>
+            <div class="box bt-0 br-0"><span class="boxtext"></span></div>
+            <div class="box bl-0"><span class="boxtext"></span></div>
+            <div class="box"><span class="boxtext"></span></div>
+            <div class="box br-0"><span class="boxtext"></span></div>
+            <div class="box bl-0 bb-0"><span class="boxtext"></span></div>
+            <div class="box bb-0"><span class="boxtext"></span></div>
+            <div class="box bb-0 br-0"><span class="boxtext"></span></div>
+        </div>
+        <div class="gameinfo">
+            <h1>WELCOME TO MY GAME</h1>
+            <span class="info">Turn for X</span>
+            <button id="reset">Reset</button>
+            <div class="imgbox"><img src="https://c.tenor.com/5mY0_OI1MSUAAAAj/peach-cat.gif" alt=""></div>
+
+        </div>
+
+        <script>
+            console.log("Welcome to tic tak toe");
+            // let music = new Audio("click.wav");
+            let ting = new Audio("ting.mp3")
+            let turn = "X";
+            let gameover = false;
+
+            const changeTurn = () => {
+                return turn === "X" ? "0" : "X";
+
+            }
+            const checkWin = () => {
+                let boxtexts = document.getElementsByClassName('boxtext');
+                let wins = [
+                    [0, 1, 2],
+                    [3, 4, 5],
+                    [6, 7, 8],
+                    [0, 3, 6],
+                    [1, 4, 7],
+                    [2, 5, 8],
+                    [0, 4, 8],
+                    [2, 4, 6],
+                ]
+
+                wins.forEach(e => {
+                    if ((boxtexts[e[0]].innerText === boxtexts[e[1]].innerText) && (boxtexts[e[2]].innerText === boxtexts[e[1]].innerText) && boxtexts[e[0]].innerText !== "") {
+                        document.querySelector('.info').innerText = boxtexts[e[0]].innerText + " Won";
+                        gameover = true;
+                        document.querySelector('.imgbox').getElementsByTagName('img')[0].style.width = '300px ';
+
+                    }
+                })
+
+            }
+            //Game Logic
+
+            let boxes = document.getElementsByClassName("box");
+            Array.from(boxes).forEach(element => {
+                let boxtext = element.querySelector('.boxtext');
+                element.addEventListener('click', () => {
+                    if (boxtext.innerText === '') {
+                        boxtext.innerText = turn;
+                        turn = changeTurn();
+                        ting.play();
+                        checkWin();
+                        if (!gameover) {
+
+                            document.getElementsByClassName('info')[0].innerText = "Turn for " + turn;
+                        }
+
+                    }
+                })
+            })
+            let reset = document.getElementById("reset");
+
+            reset.addEventListener('click', () => {
+                let boxtexts = document.querySelectorAll(".boxtext");
+                Array.from(boxtexts).forEach(element => {
+                    element.innerText = "";
+                });
+                turn = "X";
+                gameover = false;
+                document.getElementsByClassName('info')[0].innerText = "Turn for " + turn;
+
+                document.querySelector('.imgbox').getElementsByTagName('img')[0].style.width = "0px";
+            })
+        </script>
+
+</body>
+
+</html>
